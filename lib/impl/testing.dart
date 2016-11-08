@@ -239,13 +239,14 @@ class TestPackageTestRunner extends TestRunner {
 
   Launch run(DartProject project, String path) {
     String relativePath = project.getRelative(path);
+    List<String> args = ['run', 'test', '-rexpanded', '--no-color', '--platform=dartium', '--pub-serve=8585', relativePath];
 
     ProcessRunner runner = new ProcessRunner(
       sdkManager.sdk.getToolPath('pub'),
-      args: ['run', 'test', '-rexpanded', '--no-color', relativePath],
+      args: args,
       cwd: project.path
     );
-    String description = 'pub run test ${relativePath}';
+    String description = args.join(' ');
     Launch launch = new Launch(launchManager, null, null, relativePath,
       killHandler: () => runner.kill(),
       cwd: project.path,
